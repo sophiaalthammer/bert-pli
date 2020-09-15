@@ -70,6 +70,9 @@ def train(parameters, config, gpu_list):
     print("Epoch  Stage  Iterations  Time Usage    Loss    Output Information")
 
     total_len = len(dataset)
+
+    print("total length of the dataset is:{}".format(total_len))
+
     more = ""
     if total_len < 10000:
         more = "\t"
@@ -114,9 +117,13 @@ def train(parameters, config, gpu_list):
             global_step += 1
             writer.add_scalar(config.get("output", "model_name") + "_train_iter", float(loss), global_step)
 
+        #delta_t = timer() - start_time
+
+        # fehler weil step=-1 und delta_t nicht gesetzt wird und durch 0 geteilt wird
+
         output_value(current_epoch, "train", "%d/%d" % (step + 1, total_len), "%s/%s" % (
-            gen_time_str(delta_t), gen_time_str(delta_t * (total_len - step - 1) / (step + 1))),
-                     "%.3lf" % (total_loss / (step + 1)), output_info, None, config)
+            gen_time_str(delta_t), gen_time_str(delta_t * (total_len - step - 1) / (step + 2))),
+                     "%.3lf" % (total_loss / (step + 2)), output_info, None, config)
 
         if step == -1:
             logger.error("There is no data given to the model in this epoch, check your data.")

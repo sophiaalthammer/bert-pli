@@ -71,4 +71,6 @@ def init_all(config, gpu_list, checkpoint, mode, *args, **params):
 
     logger.info("Initialize done.")
 
+    print('länge vom train dataset ist: {}'.format(len(result['train_dataset']))) # hier ist die länge 0 also hier geht es irgendwo verloren...
+
     return result
