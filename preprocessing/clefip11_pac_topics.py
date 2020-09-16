@@ -110,11 +110,18 @@ def get_topics(train_dir):
             english_topics_claim.append(topic)
     return english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang
 
+
+def save_topics(topics: list, train_dir: str):
+    with open (os.path.join(train_dir, 'english_topics.txt'), 'w+') as file:
+        for topic in topics:
+            file.write('{}\n'.format(topic))
+
 english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang = get_topics(train_dir)
 
 print('number of only english topics: {}'.format(len(english_topics))) #100
 print('number of topics with english claim: {}'.format(len(english_topics_claim))) #100 # also english claims: 100
 
+save_topics(english_topics, train_dir)
 
 # same for test
 english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang = get_topics(test_dir)
@@ -122,8 +129,7 @@ english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang = get_topi
 print('number of only english topics: {}'.format(len(english_topics))) #1351
 print('number of topics with english claim: {}'.format(len(english_topics_claim))) #100 # also english claims: 1351
 
-
-
+save_topics(english_topics, test_dir)
 
 # how to read in files from the corpus
 
