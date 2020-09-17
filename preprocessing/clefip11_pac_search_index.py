@@ -9,6 +9,7 @@ random.seed(42)
 #
 # config
 #
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--index-dir', action='store', dest='index_dir',
@@ -73,7 +74,7 @@ with open(os.path.join(args.topic_dir, 'failed_dirs_50.txt'),'w') as failed_dir:
             text_claim = ' '.join(list(filter(None, [text for text in claim_lang.get('EN').values()]))).strip()
             text_desc = ' '.join(list(filter(None, [text for text in desc_lang.get('EN').values()]))).strip()
 
-            query_text = ' '.join((text_abs + text_claim + text_desc).split()[:250])
+            query_text = ' '.join((text_abs + text_claim + text_desc).split()[:1000])
             #print(query_text)
             
             searcher = SimpleSearcher(args.index_dir)
