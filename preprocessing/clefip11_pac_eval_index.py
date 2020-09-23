@@ -22,8 +22,8 @@ random.seed(42)
 
 #args = parser.parse_args()
 
-train_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/'
-folder_name = 'bm25_top50_1000'
+train_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTraining/'
+folder_name = 'bm25_top20_250'
 
 #
 # load directory structure
@@ -65,7 +65,7 @@ print(len(gold_labels))
 # only english topics!
 #
 
-with open(os.path.join(train_dir, 'english_topics.txt'), 'r') as f:
+with open(os.path.join(train_dir, 'english_topics_val.txt'), 'r') as f:
     english_topics = f.read().splitlines()
 
 english_topics = [x.split('.xml')[0] for x in english_topics]

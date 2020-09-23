@@ -111,8 +111,11 @@ def read_in_patent_xml(file_path):
     text.extend([x for x in desc_text.values() if x is not None])
     return text
 
-
-with jsonlines.open(os.path.join(args.train_dir, 'train_org.json'), mode='w') as writer:
+k = 0
+n = 0
+i = 0
+j = 0
+with jsonlines.open(os.path.join(args.train_dir, 'train_org_top20.json'), mode='w') as writer:
     for topic in gold_labels.keys():
         if topic in english_topics:
             try:
@@ -120,9 +123,7 @@ with jsonlines.open(os.path.join(args.train_dir, 'train_org.json'), mode='w') as
                 labels = gold_labels.get(topic)
                 bm25 = bm25_top50.get(topic)
 
-
-
-                bm25_negatives = random.sample(list(set(bm25)-set(labels)), 50-len(labels))
+                bm25_negatives = random.sample(list(set(bm25)-set(labels)), len(bm25)-len(labels))
                 candidates = labels + bm25_negatives
 
                 # öffne die dateien aus den files, also die topics
@@ -138,13 +139,24 @@ with jsonlines.open(os.path.join(args.train_dir, 'train_org.json'), mode='w') as
                                              candidate_name[1][4:6], candidate_name[1][6:8], candidate_name[1][8:10])
                     # öffne die dateien aus dem corpus dir, mit xml als endung, immer das erste (weil ich die endung von a1 a2 nicht mitspeichere)
                     candidate_text = read_in_patent_xml(os.path.join(file_path, os.listdir(file_path)[0]))
-                    if len(candidate_text) > 4:
+                    if len(candidate_text) > 5:
                         writer.write({'guid': '{}_{}'.format(topic, candidate),
                                       'q_paras': topic_text,
                                       'c_paras': candidate_text,
                                       'label': 1 if candidate in labels else 0})
+                        if candidate in labels:
+                            k = k + 1
+                        else:
+                            n = n + 1
                     else:
                         print('This topic {} and this candidate {} dont have a long enough text (longer than 4)'.format(topic, candidate))
+                        i = i + 1
+                        if candidate in labels:
+                            j = j+1
             except:
                 print('for this topic it didnt work {}'.format(topic))
 
+print('number of topics which did not work {}'.format(i))
+print('number of topics which did not work and have positive label {}'.format(j))
+print('number of positive labels in _org.json in total {}'.format(k))
+print('number of negative labels in _org.json in total {}'.format(n))

@@ -53,7 +53,7 @@ if __name__ == "__main__":
         outputs = test(parameters, config, gpu_list)
         for output in outputs:
             tmp_dict = {
-                'id_': output[0],
+                'guid': output[0],
                 'res': output[1]
             }
             out_line = json.dumps(tmp_dict, ensure_ascii=False) + '\n'

@@ -30,7 +30,7 @@ class AttenRNNFormatter(BasicFormatter):
             if mode != 'test':
                 labels.append(temp['label'])
 
-            print(labels)
+            #print(labels)
 
         inputs = torch.tensor(inputs)
 

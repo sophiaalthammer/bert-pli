@@ -1,6 +1,7 @@
 import logging
 import torch
 import os
+import torch.nn as nn
 
 from reader.reader import init_dataset, init_formatter, init_test_dataset
 from model import get_model
@@ -30,13 +31,14 @@ def init_all(config, gpu_list, checkpoint, mode, *args, **params):
     global_step = 0
 
     if len(gpu_list) > 0:
+        model = nn.DataParallel(model, device_ids=gpu_list)#.cuda()
+        print('hello')
         model = model.cuda()
-
-        try:
-            model.init_multi_gpu(gpu_list, config, *args, **params)
-        except Exception as e:
-            logger.warning("No init_multi_gpu implemented in the model, use single gpu instead.")
-
+        print('model cuda worked')
+        #try:
+        #    model.init_multi_gpu(gpu_list, config, *args, **params)
+        #except Exception as e:
+        #    logger.warning("No init_multi_gpu implemented in the model, use single gpu instead.")
     try:
         parameters = torch.load(checkpoint)
         if mode == 'poolout':
@@ -70,7 +72,5 @@ def init_all(config, gpu_list, checkpoint, mode, *args, **params):
         result["global_step"] = global_step
 
     logger.info("Initialize done.")
-
-    print('länge vom train dataset ist: {}'.format(len(result['train_dataset']))) # hier ist die länge 0 also hier geht es irgendwo verloren...
 
     return result

@@ -21,6 +21,7 @@ class BertPoolOutMax(nn.Module):
 
     def init_multi_gpu(self, device, config, *args, **params):
         self.bert = nn.DataParallel(self.bert, device_ids=device)
+        print('hi')
 
     def forward(self, data, config, gpu_list, acc_result, mode):
         input_ids, attention_mask, token_type_ids = data['input_ids'], data['attention_mask'], data['token_type_ids']
@@ -29,12 +30,14 @@ class BertPoolOutMax(nn.Module):
             output = []
             for k in range(input_ids.size()[0]):
                 q_lst = []
+                print('hi2')
                 for i in range(0, self.max_para_q, self.step):
-                    # print(input_ids[k, i:i+self.step].view(-1, self.max_len).size())
+                    print('hi3')
+                    print(input_ids[k, i:i+self.step].view(-1, self.max_len).size())
                     _, lst = self.bert(input_ids[k, i:i+self.step].view(-1, self.max_len),
                                        token_type_ids=token_type_ids[k, i:i+self.step].view(-1, self.max_len),
                                        attention_mask=attention_mask[k, i:i+self.step].view(-1, self.max_len))
-                    # print('before view', lst.size())
+                    print('before view', lst.size())
                     lst = lst.view(self.step, self.max_para_c, -1)
                     # print('after view', lst.size())
                     lst = lst.permute(2, 0, 1)

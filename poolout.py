@@ -35,10 +35,13 @@ if __name__ == "__main__":
     else:
         use_gpu = True
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+        print(args.gpu)
 
         device_list = args.gpu.split(",")
+        print(device_list)
         for a in range(0, len(device_list)):
             gpu_list.append(int(a))
+        print(gpu_list)
 
     os.system("clear")
 
@@ -56,7 +59,7 @@ if __name__ == "__main__":
     outputs = pool_out(parameters, config, gpu_list, args.result)
     for output in outputs:
         tmp_dict = {
-            'id_': output[0],
+            'guid': output[0],
             'res': output[1]
         }
         out_line = json.dumps(tmp_dict, ensure_ascii=False) + '\n'
