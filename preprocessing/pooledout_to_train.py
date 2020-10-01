@@ -33,11 +33,11 @@ for label in labels_list:
     match.update({label.get('guid'): label.get('label')})
 
 
-with jsonlines.open(os.path.join(args.train_dir, 'train.json'), mode='w') as writer:
+with jsonlines.open(os.path.join(args.train_dir, 'train_poolout_totrain.json'), mode='w') as writer:
     with open(os.path.join(args.train_dir, 'train_poolout.json'), 'r') as f:
         for line in f:
             sample = json.loads(line)
-            guid = sample.get('id_')
+            guid = sample.get('guid')
 
             writer.write({'guid': guid,
                           'res': sample.get('res'),

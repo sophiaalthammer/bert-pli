@@ -21,7 +21,7 @@ random.seed(42)
 #args = parser.parse_args()
 
 label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org.json'
-pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/attenlstm_output_test.txt'
+pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattengru.txt'
 
 
 #
