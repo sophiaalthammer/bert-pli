@@ -21,7 +21,7 @@ random.seed(42)
 #args = parser.parse_args()
 
 label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org.json'
-pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattengru.txt'
+pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattengru2.txt'
 
 
 #
@@ -67,6 +67,6 @@ print(classification_report(label_list, pred_list))
 
 # These values are the same as in the table above
 
-print("Precision (micro): %f" % precision_score(label_list, pred_list, labels=[0,1], average='micro', pos_label=1))
-print("Recall (micro):    %f" % recall_score(label_list, pred_list, average='micro'))
-print("F1 score (micro):  %f" % f1_score(label_list, pred_list, average='micro'), end='\n\n')
+print("Precision (macro): %f" % precision_score(label_list, pred_list, labels=[0,1], average='macro', pos_label=1))
+print("Recall (macro):    %f" % recall_score(label_list, pred_list, average='macro'))
+print("F1 score (macro):  %f" % f1_score(label_list, pred_list, average='macro'), end='\n\n')

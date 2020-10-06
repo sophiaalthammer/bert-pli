@@ -52,8 +52,8 @@ def main(label_file, pred_file):
     pred_dict = {}
     pos = []
     for pred in predictions:
-        pred_dict.update({pred.get('guid'): pred.get('res')[1]})
-        pos.append(pred.get('res')[1])
+        pred_dict.update({pred.get('guid'): pred.get('res')[1]}) # für binary ist hier 1 anstatt 0 (für mseloss output)
+        pos.append(pred.get('res')[1]) # für binary ist hier 1 anstatt 0 (für mseloss)
 
     print(min(pos))
 
@@ -121,12 +121,12 @@ def main(label_file, pred_file):
 
 
 #label_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/val_org_top20.json'
-#pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/output_test_lawbert_lawattengru.txt'
+#pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/output_test_patentbert_lawattenlstm2.txt'
 
 label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org.json'
-pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattengru.txt'
+pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_patentattenlstm_mseloss.txt'
 
-#main(label_file, pred_file)
+main(label_file, pred_file)
 
 
 

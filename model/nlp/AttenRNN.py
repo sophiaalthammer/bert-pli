@@ -55,7 +55,8 @@ class AttentionRNN(nn.Module):
         self.fc_f = nn.Linear(self.hidden_dim*self.direction, self.output_dim)
         self.dropout = nn.Dropout(self.dropout_fc)
         self.weight = self.init_weight(config, gpu_list)
-        self.criterion = nn.CrossEntropyLoss(weight=self.weight)
+        #self.criterion = nn.CrossEntropyLoss(weight=self.weight)
+        self.criterion = nn.MSELoss()
         self.accuracy_function = init_accuracy_function(config, *args, **params)
 
     def init_weight(self, config, gpu_list):
