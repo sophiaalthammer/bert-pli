@@ -1,4 +1,4 @@
-# BERT-PLI: Modeling Paragraph-Level Interactions for Legal Case Retrieval
+# Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study
 
 This repository contains the code for the reproduction paper **Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study**
  of the paper [BERT-PLI: Modeling Paragraph-Level Interactions for Legal Case Retrieval](https://www.ijcai.org/Proceedings/2020/484) 
@@ -27,25 +27,144 @@ We added the missing data preprocessing scripts as well as the script for fine-t
 
 ### Preprocessing
 
-- BERT finetuning
+#### BERT finetuning
+
+required format of the tsv-files:
+
+```
+[
+    label (0/1),
+    claim_id,
+    passage_id,
+    claim_text,
+    passage_text
+]
+```
+
+- ``./preprocessing/coliee19_task2_create_train_input.py``: preprocessing for the patent train dataset from the COLIEE2019 Task 2 for BERT fine-tuning
+
+```bash
+python coliee19_task2_create_train.py  --train-dir /home/data/coliee/task2/train --output-dir /home/data/coliee/task2/ouput 
+```
+
+- ``./preprocessing/coliee19_task2_create_test.py``: preprocessing for the patent test dataset from the COLIEE2019 Task 2 for BERT fine-tuning
+
+```bash
+python coliee19_task2_create_test.py  --train-dir /home/data/coliee/task2/train --output-dir /home/data/coliee/task2/ouput --test-gold-labels /home/data/coliee/task2/task2_test_golden-labels.xml
+```
+
+- ``./preprocessing/coliee19_task2_create_test.py``: preprocessing for the patent train and merged test dataset from the COLIEE2019 Task 2 for BERT fine-tuning
+
+```bash
+python coliee19_task2_create_train_test.py --test-dir /home/data/coliee/task2/test --train-dir /home/data/coliee/task2/train --output-dir /home/data/coliee/task2/ouput --test-gold-labels /home/data/coliee/task2/task2_test_golden-labels.xml
+```
+
+- ``./preprocessing/clefip13_ctp_create_train.py``: preprocessing for the patent training dataset from the CLEF-IP claim-to-passage task for BERT fine-tuning
+
+```bash
+python clefip13_ctp_create_train.py  --train-dir /home/data/clefip/ctp/ --output-dir /home/data/clefip/ctp/ouput --corpus-dir  --corpus-dir  /home/data/clefip/corpus
+```
+
+- ``./preprocessing/clefip13_ctp_create_test.py``: preprocessing for the patent test dataset from the CLEF-IP claim-to-passage task for BERT fine-tuning
+
+```bash
+python clefip13_ctp_create_test.py  --train-dir /home/data/clefip/ctp/ --output-dir /home/data/clefip/ctp/ouput --corpus-dir  --corpus-dir  /home/data/clefip/corpus
+```
+
+#### Filter CLef-IP prior-art-candidate search datasets for only english topics
+
+- finds the english topics of the train and test files and creates txt-files with the document ids of english topics
+
+```bash
+python clefip11_pac_filer_english_topics.py  --train-dir /home/data/clefip/pac/train --train_topics /home/data/clefip/pac/train/files --corpus-dir /home/data/clefip/corpus  --test-dir /home/data/clefip/test/ --test-topics /home/data/clefip/test/files/
+```
+
+#### Pyserini index creation and search
+
+[pyserini Github repository](https://github.com/castorini/pyserini) for further explanations.
+
+General setup for both domains:
+
+1. index_jsonl: create JSON-format for the pyserini indexer, either:
+
+    - Folder with files, each of which contains an array of JSON documents 
+    - Folder with files, each of which contains a JSON on an individual line (often called JSONL format)
+
+with the following format:
+```
+{'id': '001', 'contents': 'text'}
+```
+
+- ``./preprocessing/coliee19_task1_index_jsonl.py``: json-format for the legal dataset from the COLIEE2019 task 1 for pyserini index creation
+
+```bash
+python coliee19_task1_index_jsonl.py  --train-dir /home/data/coliee/task2/corpus/ 
+```
+
+- ``./preprocessing/clefip11_pac_index_jsonl.py``: json-format for the patent dataset from the CLEF-IP prior-art-candidate task for pyserini index creation
+
+```bash
+python clefip11_pac_index_jsonl.py  --corpus-dir /home/data/clefip/corpus/ --json-dir /home/data/clefip/corpus_json 
+```
+    
+
+2. create index with pyserini
+
+```
+python -m pyserini.index -collection JsonCollection -generator DefaultLuceneDocumentGenerator \
+ -threads 1 -input integrations/resources/sample_collection_jsonl \
+ -index indexes/sample_collection_jsonl -storePositions -storeDocvectors -storeRaw
+```
+
+3. index_search: search the created index with pyserini for the given topics
 
 
-- Pyserini index creation and search
+- ``./preprocessing/coliee19_task1_index_search.py``: search the legal index for the topics from the COLIEE2019 task 1 for pyserini index search
+
+```bash
+python coliee19_task1_index_search.py  --train-dir /home/data/coliee/task2/corpus/ 
+```
+
+- ``./preprocessing/clefip11_pac_index_search.py``: search the patent index for the topics from the CLEF-IP prior-art-candidate task for pyserini index search
+
+```bash
+python clefip11_pac_index_search.py  --index-dir /home/data/clefip/index/ --topic-dir /home/data/clefip/task1/train/
+```
 
 
-- for training AttenRNN
+#### Preprocessing for training AttenRNN
+
+create format for the BertDocParaFormatter.py
+
+- ``./preprocessing/coliee19_task1_json_lines.py``: create format for AttentionRNN training dataset from the COLIEE2019 Task 1 
+
+```bash
+python coliee19_task1_json_lines.py  --train-dir /home/data/coliee/train/ 
+```
+
+- ``./preprocessing/coliee19_task1_json_lines_test.py``: create format for AttentionRNN test dataset from the COLIEE2019 Task 1 
+
+```bash
+python coliee19_task1_json_lines_test.py  --train-dir /home/data/coliee/train/ --output-dir /home/data/coliee/output --test-gold-labels /home/data/coliee/task1_test_golden-labels.xml
+```
 
 
-- poolout to train
+- ``./preprocessing/clefip11_pac_json_lines.py``: create format for AttentionRNN training/test dataset from the COLIEE2019 Task 1 from the CLEF-IP prior-art-candidate task
 
+```bash
+python clefip11_pac_json_lines.py  --train-dir /home/data/clefip/train/ --corpus-dir /home/data/clefip/corpus  --folder-name bm25_top50
+```
+
+
+
+#### Poolout to train
+
+```bash
+python poolout_to_train.py  --train-dir /home/data/clefip/train/ 
+```
 
 
 ### Formatter
-
-
-- input format for BERT fine-tuning
-
-
 
 - ``./formatter/nlp/BertDocParaFormatter.py`` : prepare input for ``./model/nlp/BertPoolOutMax.py``
   An example:
@@ -116,7 +235,10 @@ or
 python3 test.py -c config/nlp/AttenLSTM.config -g [GPU_LIST] --checkpoint [path of Bert checkpoint] --result [path to save results] 
 ```
 
-- Eval?
+
+- Eval!!
+
+
 
 
 
