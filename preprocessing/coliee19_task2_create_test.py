@@ -12,17 +12,15 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--train-dir', action='store', dest='train_dir',
                     help='training file directory location', required=True)
-
 parser.add_argument('--output-dir', action='store', dest='output_dir',
-                    help='training output file location for test.tsv', required=True)
-
+                    help='training output file location for test_train_format.tsv', required=True)
 parser.add_argument('--test-gold-labels', action='store', dest='test_gold_labels',
                     help='location and name of the gold labels xml-file to create a training set from the test data', required=True)
 
 args = parser.parse_args()
 
 #train_dir = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task2/task2_test'
-#output_dir = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task2'
+#output_dir = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task2/mrpc_format'
 #test_gold_labels = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task2/task2_test_golden-labels.xml'
 
 #
@@ -45,7 +43,7 @@ for child in root:
     gold_labels.update({child.attrib['id']: rank})
 
 #
-# Write test.tsv file with query_id \t doc_id \t query_text \t doc_relevant_text
+# Write test_train_format.tsv file with query_text \t doc_relevant_text \t doc_irrelevant_text for all subdirectories
 #
 
 with open(os.path.join(args.output_dir, 'test.tsv'), 'wt') as out_file:
@@ -66,7 +64,16 @@ with open(os.path.join(args.output_dir, 'test.tsv'), 'wt') as out_file:
 
         doc_rel_id = gold_labels.get(sub_dir)
 
-        # write text in test.tsv file
-        for id in doc_rel_id:
-            doc_rel_text = paragraphs_text.get(id)
-            tsv_writer.writerow([sub_dir, '{}_{}'.format(sub_dir,id), query_text, doc_rel_text])
+        for rel_id in doc_rel_id:
+            doc_rel_text = paragraphs_text.get(rel_id)
+            tsv_writer.writerow([1, sub_dir, rel_id, query_text, doc_rel_text])
+
+        # sample randomly from the paragraphs as many irrelevant paragraphs as you have relevant ones
+        doc_irrel_id = [irrel_id for irrel_id in paragraphs_text.keys() if irrel_id not in doc_rel_id]
+
+        for irrel_id in doc_irrel_id:
+            doc_irrel_text = paragraphs_text.get(irrel_id)
+            tsv_writer.writerow([0, sub_dir, irrel_id, query_text, doc_irrel_text])
+
+
+

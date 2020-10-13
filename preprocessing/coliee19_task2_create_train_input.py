@@ -3,6 +3,10 @@ import csv
 import argparse
 import random
 random.seed(42)
+#
+# creates balanced training input file for finetuning bert with 1 or 0 labels
+#
+
 
 #
 # config
@@ -31,6 +35,9 @@ list_dir = [x for x in os.walk(args.train_dir)]
 
 with open(os.path.join(args.output_dir, 'train.tsv'), 'wt') as out_file:
     tsv_writer = csv.writer(out_file, delimiter='\t')
+
+    samples = []
+
     for sub_dir in list_dir[0][1]:
         # read in query text
         with open(os.path.join(args.train_dir, sub_dir, 'entailed_fragment.txt'), 'r') as entailed_fragment:
@@ -56,8 +63,18 @@ with open(os.path.join(args.output_dir, 'train.tsv'), 'wt') as out_file:
         # create mapping of training pairs with one relevant and one irrelevant text
         ids_rel_irrel = list(zip(doc_rel_id, doc_irrel_id))
 
-        # write text in train.tsv file
+        # write sample
         for i in range(len(ids_rel_irrel)):
             doc_rel_text = paragraphs_text.get(ids_rel_irrel[i][0])
             doc_irrel_text = paragraphs_text.get(ids_rel_irrel[i][1])
-            tsv_writer.writerow([query_text, doc_rel_text, doc_irrel_text])
+            samples.append([1, sub_dir, ids_rel_irrel[i][0], query_text, doc_rel_text])
+            samples.append([0, sub_dir, ids_rel_irrel[i][1], query_text, doc_irrel_text])
+
+        # important: shuffle the train data
+        random.shuffle(samples)
+
+        # write text in train.tsv file
+        for sample in samples:
+            tsv_writer.writerow(sample)
+
+
