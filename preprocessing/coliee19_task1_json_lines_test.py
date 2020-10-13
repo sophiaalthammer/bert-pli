@@ -14,10 +14,8 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--train-dir', action='store', dest='train_dir',
                     help='training file directory location', required=True)
-
 parser.add_argument('--output-dir', action='store', dest='output_dir',
                     help='training output file location for test.tsv', required=True)
-
 parser.add_argument('--test-gold-labels', action='store', dest='test_gold_labels',
                     help='location and name of the gold labels xml-file to create a training set from the test data', required=True)
 

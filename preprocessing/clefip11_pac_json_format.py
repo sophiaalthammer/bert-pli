@@ -27,12 +27,11 @@ args = parser.parse_args()
 # load directory structure
 #
 
-#english_topics = []
+
 for root, dirs, files in os.walk(args.corpus_dir):
     # chooses the first document of the files, because this is always the relevant one we are referring to
     if files:
         file_path = os.path.join(root, files[0])
-        #print(file_path)
         tree = ET.parse(file_path)
         root = tree.getroot()
 

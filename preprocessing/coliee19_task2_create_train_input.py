@@ -11,7 +11,6 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--train-dir', action='store', dest='train_dir',
                     help='training file directory location', required=True)
-
 parser.add_argument('--output-dir', action='store', dest='output_dir',
                     help='training output file location for train.tsv', required=True)
 

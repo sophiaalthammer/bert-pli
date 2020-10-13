@@ -12,7 +12,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--train-dir', action='store', dest='train_dir',
                     help='training file directory location', required=True)
 
-
 args = parser.parse_args()
 
 #train_dir = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_train'

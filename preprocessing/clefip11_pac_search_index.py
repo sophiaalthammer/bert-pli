@@ -29,14 +29,14 @@ args = parser.parse_args()
 with open(os.path.join(args.topic_dir, 'failed_dirs.txt'), 'r') as topics:
     topic_list = topics.read().splitlines()
 
-print(topic_list)
+print('These are the found topics: {}'.format(topic_list))
 
 #
 # load directory structure
 #
 
 
-with open(os.path.join(args.topic_dir, 'failed_dirs_50.txt'),'w') as failed_dir:
+with open(os.path.join(args.topic_dir, 'failed_dirs.txt'),'w') as failed_dir:
     for topic in topic_list:
         try:
             # read in query text

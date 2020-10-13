@@ -10,24 +10,27 @@ random.seed(42)
 #
 # config
 #
-#parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser()
 
-#parser.add_argument('--train-dir', action='store', dest='train_dir',
-#                    help='training file directory location', required=True)
+parser.add_argument('--train-dir', action='store', dest='train_dir',
+                    help='training file directory location', required=True)
+parser.add_argument('--train-topics', action='store', dest='train_topics',
+                    help='training topics.xml file', required=True)
+parser.add_argument('--corpus-dir', action='store', dest='corpus_dir',
+                    help='corpus directory', required=True)
+parser.add_argument('--test-dir', action='store', dest='test_dir',
+                    help='test file directory location', required=True)
+parser.add_argument('--test-topics', action='store', dest='test_topics',
+                    help='test topics.xml file', required=True)
 
-#parser.add_argument('--output-dir', action='store', dest='output_dir',
-#                    help='training output file location for test.tsv', required=True)
 
-#parser.add_argument('--test-gold-labels', action='store', dest='test_gold_labels',
-#                    help='location and name of the gold labels xml-file to create a training set from the test data', required=True)
+args = parser.parse_args()
 
-#args = parser.parse_args()
-
-train_topics = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTraining/topics.xml'
-train_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTraining/files'
-corpus_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/corpus'
-test_topics = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip_2011_PACTest/PAC_topics.xml'
-test_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip_2011_PACTest/files'
+#train_topics = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTraining/topics.xml'
+#train_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTraining/files'
+#corpus_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/corpus'
+#test_topics = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip_2011_PACTest/PAC_topics.xml'
+#test_dir = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip_2011_PACTest/files'
 
 #
 # load gold labels as list
@@ -47,8 +50,8 @@ def load_topics_from_xml(xml_path: str):
     return topics
 
 
-topics_train = load_topics_from_xml(train_topics)
-topics_test = load_topics_from_xml(test_topics)
+topics_train = load_topics_from_xml(args.train_topics)
+topics_test = load_topics_from_xml(args.test_topics)
 
 
 # topics only from EP collection not from WO
@@ -116,20 +119,20 @@ def save_topics(topics: list, train_dir: str):
         for topic in topics:
             file.write('{}\n'.format(topic))
 
-english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang = get_topics(train_dir)
+english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang = get_topics(args.train_dir)
 
 print('number of only english topics: {}'.format(len(english_topics))) #100
 print('number of topics with english claim: {}'.format(len(english_topics_claim))) #100 # also english claims: 100
 
-save_topics(english_topics, train_dir)
+save_topics(english_topics, args.train_dir)
 
 # same for test
-english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang = get_topics(test_dir)
+english_topics, english_topics_claim, abs_lang, claim_lang, desc_lang = get_topics(args.test_dir)
 
 print('number of only english topics: {}'.format(len(english_topics))) #1351
 print('number of topics with english claim: {}'.format(len(english_topics_claim))) #100 # also english claims: 1351
 
-save_topics(english_topics, test_dir)
+save_topics(english_topics, args.test_dir)
 
 # how to read in files from the corpus
 
@@ -139,17 +142,15 @@ for topic in topics_train:
 
     try:
         if file_number.startswith('0'):
-            file_path = os.path.join(corpus_dir, 'EP', '000000', file_number[1:3], file_number[3:5], file_number[5:7], '{}.xml'.format(topic))
+            file_path = os.path.join(args.corpus_dir, 'EP', '000000', file_number[1:3], file_number[3:5], file_number[5:7], '{}.xml'.format(topic))
         else:
-            file_path = os.path.join(corpus_dir, 'EP', '000001', file_number[1:3], file_number[3:5], file_number[5:7], '{}.xml'.format(topic))
+            file_path = os.path.join(args.corpus_dir, 'EP', '000001', file_number[1:3], file_number[3:5], file_number[5:7], '{}.xml'.format(topic))
 
         #print(file_path)
-
         #file_path = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/corpus/EP/000001/00/00/00/EP-1000000-A1.xml'
 
         tree = ET.parse(file_path)
         root = tree.getroot()
-
 
         # read in abstract text
         for abstract in root.iter('abstract'):
@@ -180,7 +181,5 @@ for topic in topics_train:
     except:
         print('file {} not found in corpus'.format(topic))
 
-
-# ja klar werden sie im corpus nicht gefunden, weil sie sich nicht selbst suchen sollen, deshalb sind die files in dem ordner angegeben!
 
 
