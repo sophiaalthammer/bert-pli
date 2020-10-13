@@ -52,6 +52,12 @@ This repository contains the code for BERT-PLI in our IJCAI-PRICAI 2020 submissi
 
 ## How to Run?
 
+- Finetune BERT model on paragraph-level interaction binary classification
+
+```bash
+python finetune.py --model_name bert-base-uncased --task_name MRPC  --do_train   --do_eval   --data_dir /home/data/   --max_seq_length 512   --per_device_train_batch_size 1   --learning_rate 1e-5   --num_train_epochs 3.0   --save_steps 403   --gradient_accumulation 16   --output_dir /home/data/output
+```
+
 - Get paragraph-level interactions by BERT: 
 
 ```bash
