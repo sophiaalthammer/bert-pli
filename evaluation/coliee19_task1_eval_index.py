@@ -12,7 +12,6 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--train-dir', action='store', dest='train_dir',
                     help='train directory location', required=True)
-
 parser.add_argument('--test-gold-labels', action='store', dest='test_gold_labels',
                     help='test gold labels xml file', required=False)
 

@@ -235,10 +235,31 @@ or
 python3 test.py -c config/nlp/AttenLSTM.config -g [GPU_LIST] --checkpoint [path of Bert checkpoint] --result [path to save results] 
 ```
 
+- Eval
 
-- Eval!!
+evaluate the recall of the index search for the topics for the COLIEE2019 Task 2
 
+```bash
+python coliee19_task1_eval_index.py --train-dir /home/data/coliee/task1/train  --test-gold-labels /home/data/coliee/task1/task1_test_golden-labels.xml
+```
 
+evaluate the recall of the index search for the topics for the CLEF-IP 2011 prior-art-candidate search
+
+```bash
+python clefip11_pac_eval_index.py --train-dir /home/data/clefip/pac/train  --folder-name bm25_top50
+```
+ 
+evaluate the binary classification metrics for the COLIEE2019 of CLEF-IP tasks
+
+```bash
+python eval_predictions_binary.py --label-file /home/coliee/task1/test/test.json --pred-file /home/coliee/task1/test/pred.txt
+```
+
+evaluate the ranking metrics for COLIEE2019 or CLEF-IP tasks
+
+```bash
+python eval_predictions_ranking.py --label-file /home/coliee/task1/test/test.json --pred-file /home/coliee/task1/test/pred.txt
+```  
 
 
 

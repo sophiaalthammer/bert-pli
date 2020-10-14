@@ -12,16 +12,20 @@ random.seed(42)
 #
 # config
 #
-#parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser()
 
-#parser.add_argument('--train-dir', action='store', dest='train_dir',
-#                    help='training file directory location', required=True)
+parser.add_argument('--label-file', action='store', dest='label_file',
+                    help='json file with the labels of the test file', required=True)
+parser.add_argument('--pred-file', action='store', dest='pred_file',
+                    help='txt file with the binary predictions of the test file', required=True)
 
+args = parser.parse_args()
 
-#args = parser.parse_args()
+#label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org.json'
+#pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattengru2.txt'
 
-label_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/val_org_top20.json'
-pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/output_test_patentbert_lawattenlstm2.txt'
+#label_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/val_org_top20.json'
+#pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/output_test_patentbert_lawattenlstm2.txt'
 
 
 #
@@ -30,7 +34,7 @@ pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_
 
 labels = []
 
-with jsonlines.open(label_file, mode='r') as reader:
+with jsonlines.open(args.label_file, mode='r') as reader:
     for file in reader:
         labels.append(file)
 
@@ -41,7 +45,7 @@ for label in labels:
 print(len(labels))
 print(len(label_dict))
 
-with open(pred_file, 'r') as reader:
+with open(args.pred_file, 'r') as reader:
     content = reader.read().splitlines()
     predictions = [ast.literal_eval(file) for file in content]
 

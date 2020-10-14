@@ -13,17 +13,6 @@ import os
 import sys
 import pytrec_eval
 
-#
-# config
-#
-#parser = argparse.ArgumentParser()
-
-#parser.add_argument('--train-dir', action='store', dest='train_dir',
-#                    help='training file directory location', required=True)
-
-
-#args = parser.parse_args()
-
 
 def main(label_file, pred_file):
     #
