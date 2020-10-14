@@ -8,6 +8,8 @@ We added the missing data preprocessing scripts as well as the script for fine-t
  is based on [HuggingFace' transformers library](https://github.com/huggingface/transformers). Furthermore
  we added scripts for the binary evaluation with the [SciKitLearn classification report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html) as well as for the ranking evaluation 
  using the [pytrec_eval libary](https://github.com/cvangysel/pytrec_eval).
+ 
+The open-sourced trained models can be found [here]().
 
 
 ## Outline
@@ -71,7 +73,7 @@ python clefip13_ctp_create_train.py  --train-dir /home/data/clefip/ctp/ --output
 python clefip13_ctp_create_test.py  --train-dir /home/data/clefip/ctp/ --output-dir /home/data/clefip/ctp/ouput --corpus-dir  --corpus-dir  /home/data/clefip/corpus
 ```
 
-#### Filter CLef-IP prior-art-candidate search datasets for only english topics
+#### Filter CLEF-IP prior-art-candidate search datasets for only english topics
 
 - finds the english topics of the train and test files and creates txt-files with the document ids of english topics
 
@@ -265,13 +267,13 @@ python eval_predictions_ranking.py --label-file /home/coliee/task1/test/test.jso
 
 ## Data
 
-####Legal datasets
+#### Legal datasets
 
 For the legal datasets refer to [COLIEE 2019](https://sites.ualberta.ca/~rabelo/COLIEE2019/), for the paragraph-level 
 finetuning of the BERT model the dataset from Task 1 is used, for the document retrieval the dataset from Task 2.
 
 
-####Patent datasets
+#### Patent datasets
 For the patent dataset refer to [CLEF-IP 2013](http://www.ifs.tuwien.ac.at/~clef-ip/download-central.shtml), for the paragraph-level
 finetuning of the BERT model the dataset from the [claims-to-passage 2013 task](http://www.ifs.tuwien.ac.at/~clef-ip/2013/claims-to-passage.shtml) is used
 , for the document retrieval the dataset from the [prior art candidate search 2011 task](http://www.ifs.tuwien.ac.at/~clef-ip/download/2011/index.shtml).
