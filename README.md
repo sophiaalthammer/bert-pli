@@ -263,6 +263,18 @@ evaluate the ranking metrics for COLIEE2019 or CLEF-IP tasks
 python eval_predictions_ranking.py --label-file /home/coliee/task1/test/test.json --pred-file /home/coliee/task1/test/pred.txt
 ```  
 
+Students paired t-test for the ranking metrics for COLIEE2019 or CLEF-IP tasks:
+
+To compare different prediction model:
+
+```bash
+python eval_predictions_ranking_ttest.py --label-file /home/coliee/task1/test/test.json --pred-file /home/coliee/task1/test/pred.txt  --pred_file2 /home/coliee/task1/test/pred2.txt
+``` 
+
+To compare to the baseline BM25 performance:
+```bash
+python eval_predictions_ranking_ttest.py --label-file /home/coliee/task1/test/test.json --pred-file /home/coliee/task1/test/pred.txt  --bm25_folder /home/coliee/task1/test/bm25_top50/
+``` 
 
 
 ## Data
