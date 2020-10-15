@@ -9,7 +9,7 @@ We added the missing data preprocessing scripts as well as the script for fine-t
  we added scripts for the binary evaluation with the [SciKitLearn classification report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html) as well as for the ranking evaluation 
  using the [pytrec_eval libary](https://github.com/cvangysel/pytrec_eval).
  
-The open-sourced trained models can be found [here]().
+The open-sourced trained models can be found [here](https://zenodo.org/record/4088010).
 
 
 ## Outline
