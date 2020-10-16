@@ -257,11 +257,22 @@ evaluate the binary classification metrics for the COLIEE2019 of CLEF-IP tasks
 python eval_predictions_binary.py --label-file /home/coliee/task1/test/test.json --pred-file /home/coliee/task1/test/pred.txt
 ```
 
+or for BM25 run:
+```bash
+python eval_predictions_binary.py --label-file /home/coliee/task1/test/test.json --bm25-folder /home/coliee/task1/bm25/ --cutoff 6
+```
+
 evaluate the ranking metrics for COLIEE2019 or CLEF-IP tasks
 
 ```bash
 python eval_predictions_ranking.py --label-file /home/coliee/task1/test/test.json --pred-file /home/coliee/task1/test/pred.txt
 ```  
+
+Students paired t-test for the binary metrics for COLIEE2019 to the BM25 baseline:
+```bash
+python eval_predictions_binary_ttest.py --pred-file /home/coliee/task1/test/output_pred.txt --bm25-folder /home/coliee/task1/bm25/ --cutoff 6
+```
+
 
 Students paired t-test for the ranking metrics for COLIEE2019 or CLEF-IP tasks:
 
