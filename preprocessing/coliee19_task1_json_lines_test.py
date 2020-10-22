@@ -50,7 +50,7 @@ for child in root:
 
 list_dir = [x for x in os.walk(args.train_dir)]
 
-with jsonlines.open(os.path.join(args.train_dir, 'test_org.json'), mode='w') as writer:
+with jsonlines.open(os.path.join(args.train_dir, 'test_org_200.json'), mode='w') as writer:
     for sub_dir in list_dir[0][1]:
     #sub_dir = '001'
         with open(os.path.join(args.train_dir, sub_dir, 'base_case.txt'), 'r') as entailed_fragment:
@@ -75,4 +75,9 @@ with jsonlines.open(os.path.join(args.train_dir, 'test_org.json'), mode='w') as 
                                   'q_paras': query_text,
                                   'c_paras': para_text,
                                   'label': 1 if paragraph.split('.')[0] in doc_rel_id else 0})
+            else:
+                writer.write({'guid': guid,
+                              'q_paras': '',
+                              'c_paras': '',
+                              'label': 0})
 

@@ -41,29 +41,40 @@ def main(label_file, pred_file):
     pred_dict = {}
     pos = []
     for pred in predictions:
-        pred_dict.update({pred.get('guid'): pred.get('res')[1]}) # für binary ist hier 1 anstatt 0 (für mseloss output)
-        pos.append(pred.get('res')[1]) # für binary ist hier 1 anstatt 0 (für mseloss)
+        pred_dict.update({pred.get('guid'): pred.get('res')[1]})  # für binary ist hier 1 anstatt 0 (für mseloss output)
+        pos.append(pred.get('res')[1])  # für binary ist hier 1 anstatt 0 (für mseloss)
 
     print(min(pos))
 
-    files = list(pred_dict.keys())
+    files = list(label_dict.keys())
     files.sort()
 
     qrels = {}
     for file in files:
         qrels.update({file.split('_')[0]: {}})
     for file in files:
-        #print(file.split('_')[0])
+        # print(file.split('_')[0])
         qrels.get(file.split('_')[0]).update({file.split('_')[1]: label_dict.get(file)})
         # qrels.update({file.split('_')[0]: {file.split('_')[1]: label_dict.get(file)}})
         # label_dict.get(file)
+
+    # print(qrels.get('001'))
 
     run = {}
     for file in files:
         run.update({file.split('_')[0]: {}})
     for file in files:
-        #print(file.split('_')[0])
-        run.get(file.split('_')[0]).update({file.split('_')[1]: pred_dict.get(file) + min(pos)})
+        # print(file.split('_')[0])
+        if min(pos) < 0:
+            if pred_dict.get(file):
+                run.get(file.split('_')[0]).update({file.split('_')[1]: pred_dict.get(file) - min(pos) + 1})
+            else:
+                run.get(file.split('_')[0]).update({file.split('_')[1]: - min(pos)})
+        else:
+            if pred_dict.get(file):
+                run.get(file.split('_')[0]).update({file.split('_')[1]: pred_dict.get(file) + min(pos) + 1})
+            else:
+                run.get(file.split('_')[0]).update({file.split('_')[1]: + min(pos)})
 
     # trec eval
 
@@ -112,20 +123,19 @@ if __name__ == "__main__":
     #
     # config
     #
-    parser = argparse.ArgumentParser()
+    #parser = argparse.ArgumentParser()
 
-    parser.add_argument('--label-file', action='store', dest='label_file',
-                        help='org file with the guid and the labels', required=True)
-    parser.add_argument('--pred-file', action='store', dest='pred_file',
-                        help='file with the binary prediction per guid', required=True)
-
-    args = parser.parse_args()
+    #parser.add_argument('--label-file', action='store', dest='label_file',
+    #                    help='org file with the guid and the labels', required=True)
+    #parser.add_argument('--pred-file', action='store', dest='pred_file',
+    #                    help='file with the binary prediction per guid', required=True)
+    #args = parser.parse_args()
 
     #label_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/test_org_top50_wogold.json'
     #pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/output/output_test_top50_bertorg_lawattenlstm.txt'
 
-    #label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org.json'
-    #pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_patentattenlstm.txt'
+    label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
+    pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
 
     main(args.label_file, args.pred_file)
 
