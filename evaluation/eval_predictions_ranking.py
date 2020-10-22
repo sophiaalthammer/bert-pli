@@ -25,6 +25,7 @@ def main(label_file, pred_file):
         for file in reader:
             labels.append(file)
 
+
     label_dict = {}
     for label in labels:
         label_dict.update({label.get('guid'): label.get('label')})
