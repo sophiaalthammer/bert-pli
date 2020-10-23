@@ -127,10 +127,10 @@ if __name__ == "__main__":
 
     #args = parser.parse_args()
 
-    label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
-    pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
+    label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
+    pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
 
-    bm25_folder = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/task1_test_bm25_top50'
+    bm25_folder = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/task1_test_bm25_top50'
     cutoff = 2
 
     # label_file = '/mnt/c/Users/salthamm/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/test_org_top50_wogold.json'
