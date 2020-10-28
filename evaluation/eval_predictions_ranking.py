@@ -200,26 +200,30 @@ if __name__ == "__main__":
     #
     # config
     #
-    #parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser()
 
-    #parser.add_argument('--label-file', action='store', dest='label_file',
-    #                    help='org file with the guid and the labels', required=True)
-    #parser.add_argument('--pred-file', action='store', dest='pred_file',
-    #                    help='file with the binary prediction per guid', required=True)
-    #args = parser.parse_args()
+    parser.add_argument('--label-file', action='store', dest='label_file',
+                        help='org file with the guid and the labels', required=True)
+    parser.add_argument('--pred-file', action='store', dest='pred_file',
+                        help='file with the binary prediction per guid', required=False)
+    parser.add_argument('--bm25-folder', action='store', dest='bm25_folder',
+                        help='folder with the BM25 retrieval per guid which the result is compared to', required=False)
+    args = parser.parse_args()
 
     #label_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/test_org_top50_wogold.json'
     #pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/output/output_test_top50_wogold_patentbert_patentattengru.txt'
 
-    label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
-    pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
+    #label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
+    #pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
 
     # bm25 labels: from bm25_folder
     #bm25_folder = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/bm25_top50'
     #bm25_folder = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/task1_test_bm25_top50'
 
-    eval_ranking_pred(label_file, pred_file)
-    #eval_ranking_bm25(label_file, bm25_folder)
+    if args.pred_file:
+        eval_ranking_pred(args.label_file, args.pred_file)
+    if args.bm25_folder:
+        eval_ranking_bm25(args.label_file, args.bm25_folder)
 
 
 
