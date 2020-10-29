@@ -4,11 +4,13 @@ This repository contains the code for the reproduction paper **Cross-domain Retr
  of the paper [BERT-PLI: Modeling Paragraph-Level Interactions for Legal Case Retrieval](https://www.ijcai.org/Proceedings/2020/484) 
  and is based on the [BERT-PLI Github repository](https://github.com/ThuYShao/BERT-PLI-IJCAI2020).
 
-We added the missing data preprocessing scripts as well as the script for fine-tuning the BERT model on binary classification, which
+We added the missing data [preprocessing](preprocessing) scripts as well as the script for [fine-tuning](finetune.py) the BERT model on binary classification, which
  is based on [HuggingFace' transformers library](https://github.com/huggingface/transformers). Furthermore
- we added scripts for the binary evaluation with the [SciKitLearn classification report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html) as well as for the ranking evaluation 
+ we added scripts for the [evaluation](evaluation) with the [SciKitLearn classification report](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.classification_report.html) as well as for the ranking evaluation 
  using the [pytrec_eval libary](https://github.com/cvangysel/pytrec_eval).
- 
+
+
+
 The open-sourced trained models can be found [here](https://zenodo.org/record/4088010).
 
 
