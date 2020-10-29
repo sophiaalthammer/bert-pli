@@ -76,7 +76,7 @@ def eval_ranking_pred(label_file, pred_file):
     # trec eval
 
     evaluator = pytrec_eval.RelevanceEvaluator(
-        qrels, pytrec_eval.supported_measures)
+        qrels, {'map', 'P_1', 'recall_1', 'P_2', 'recall_2'})
 
     results = evaluator.evaluate(run)
 
@@ -104,7 +104,7 @@ def eval_ranking_pred(label_file, pred_file):
                 [query_measures[measure]
                  for query_measures in results.values()]))
 
-    with open(pred_file.split('.txt')[0] + '_eval_200_2.txt', 'w') as output:
+    with open(pred_file.split('.txt')[0] + '_eval_200_3.txt', 'w') as output:
         for measure in sorted(query_measures.keys()):
             output.write(write_line(
                 measure,
@@ -142,12 +142,12 @@ def eval_ranking_bm25(label_file, bm25_folder):
     for file in files:
         run.update({file.split('_')[0]: {}})
     for key in list(run.keys()):
-        with open(os.path.join(bm25_folder, 'bm25_top50_{}.xml.txt'.format(key)), #.xml für clef-ip corpus
+        with open(os.path.join(bm25_folder, 'bm25_top50_{}.txt'.format(key)), #.xml für clef-ip corpus
                   'r') as out:  # (.xml) for clef-ip top 50, different splitting also!
-            text = [text.split('-')[0] + '-' + text.split('-')[1] for text in
-                    [text.split('\n')[0].strip() for text in out.readlines()]]
-            #text = [text.split('_')[1] for text in
+            #text = [text.split('-')[0] + '-' + text.split('-')[1] for text in
             #        [text.split('\n')[0].strip() for text in out.readlines()]]
+            text = [text.split('_')[1] for text in
+                    [text.split('\n')[0].strip() for text in out.readlines()]]
             for file in files:
                 if file.split('_')[1] in text:
                     run.get(key).update(
@@ -157,7 +157,7 @@ def eval_ranking_bm25(label_file, bm25_folder):
 
     # trec eval
     evaluator = pytrec_eval.RelevanceEvaluator(
-        qrels, pytrec_eval.supported_measures)
+        qrels, {'map', 'P_1', 'recall_1', 'P_2', 'recall_2'})#pytrec_eval.supported_measures
 
     results = evaluator.evaluate(run)
 
@@ -185,7 +185,7 @@ def eval_ranking_bm25(label_file, bm25_folder):
                 [query_measures[measure]
                  for query_measures in results.values()]))
 
-    with open(os.path.join(bm25_folder, 'eval_bm25_200.txt'), 'w') as output:
+    with open(os.path.join(bm25_folder, 'eval_bm25_200_3.txt'), 'w') as output:
         for measure in sorted(query_measures.keys()):
             output.write(write_line(
                 measure,
@@ -214,7 +214,7 @@ if __name__ == "__main__":
     #pred_file = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/output/output_test_top50_wogold_patentbert_patentattengru.txt'
 
     #label_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
-    #pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
+    #pred_file = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_lawattenlstm.txt'
 
     # bm25 labels: from bm25_folder
     #bm25_folder = '/mnt/c/Users/sophi/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/bm25_top50'
