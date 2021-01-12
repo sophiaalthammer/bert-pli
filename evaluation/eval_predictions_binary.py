@@ -215,37 +215,37 @@ if __name__ == "__main__":
     #
     # config
     #
-    #parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser()
 
-    #parser.add_argument('--label-file', action='store', dest='label_file',
-    #                    help='json file with the labels of the test file', required=True)
-    #parser.add_argument('--pred-file', action='store', dest='pred_file',
-    #                    help='txt file with the binary predictions of the test file', required=False)
-    #parser.add_argument('--bm25-folder', action='store', dest='bm25_folder',
-    #                    help='folder with the BM25 retrieval per guid which the result is compared to', required=False)
-    #parser.add_argument('--cutoff', action='store', dest='cutoff',
-    #                    help='cutoff value for BM25 prediction', required=False)
+    parser.add_argument('--label-file', action='store', dest='label_file',
+                        help='json file with the labels of the test file', required=True)
+    parser.add_argument('--pred-file', action='store', dest='pred_file',
+                        help='txt file with the binary predictions of the test file', required=False)
+    parser.add_argument('--bm25-folder', action='store', dest='bm25_folder',
+                        help='folder with the BM25 retrieval per guid which the result is compared to', required=False)
+    parser.add_argument('--cutoff', action='store', dest='cutoff',
+                        help='cutoff value for BM25 prediction', required=False)
 
-    #args = parser.parse_args()
+    args = parser.parse_args()
 
-    label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
-    pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
+    #label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/test_org_200.json'
+    #pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt'
 
-    predictions = ['/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattengru.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_patentattenlstm.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_patentattengru.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattenlstm2.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattengru2.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_patentattenlstm.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_patentattengru.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_lawattenlstm.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_lawattengru.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_patentattenlstm.txt',
-                        '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_patentattengru.txt']
+    #predictions = ['/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattenlstm.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_lawattengru.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_patentattenlstm.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_lawbert_patentattengru.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattenlstm2.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_lawattengru2.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_patentattenlstm.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_patentbert_patentattengru.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_lawattenlstm.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_lawattengru.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_patentattenlstm.txt',
+    #                    '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/output/output_colieedata_test_top50_wogold_bertorg_patentattengru.txt']
 
-    bm25_folder = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/task1_test_bm25_top50'
-    cutoff = 5
+    #bm25_folder = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2019/task1/task1_test/task1_test_bm25_top50'
+    #cutoff = 5
 
     #label_file = '/mnt/c/Users/salthamm/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/test_org_top50_wogold.json'
 
@@ -265,10 +265,11 @@ if __name__ == "__main__":
     #bm25_folder = '/mnt/c/Users/salthamm/Documents/phd/data/clef-ip/2011_prior_candidate_search/clef-ip-2011_PACTest/bm25_top50'
     #cutoff = 5
 
-    for pred_file in predictions:
-        pred_eval_binary(label_file, pred_file)
+    #for pred_file in predictions:
+    #    pred_eval_binary(label_file, pred_file)
 
-    #if bm25_folder and cutoff:
-        #prec, recall, f1 = pred_eval_bm25_coliee(label_file, bm25_folder, cutoff)
-    #    pred_eval_bm25_clef(label_file, bm25_folder, cutoff)
+    pred_eval_binary(args.label_file, args.pred_file)
+    if args.bm25_folder and args.cutoff:
+        prec, recall, f1 = pred_eval_bm25_coliee(args.label_file, args.bm25_folder, args.cutoff)
+        #pred_eval_bm25_clef(label_file, bm25_folder, cutoff)
 
