@@ -23,6 +23,9 @@ if __name__ == "__main__":
     parser.add_argument('--gpu', '-g', help="gpu id list")
     parser.add_argument('--checkpoint', help="checkpoint file path")
     parser.add_argument('--result', help="result file path", required=True)
+    parser.add_argument('--input_path', help="input file path", required=False)
+    parser.add_argument('--input_file', help="input file path", required=False)
+    parser.add_argument('--batch_size', help="batch size for inference", required=False)
     args = parser.parse_args()
 
 
@@ -46,6 +49,15 @@ if __name__ == "__main__":
     os.system("clear")
 
     config = create_config(configFilePath)
+
+    print(config)
+
+    if args.input_path:
+        config['data']['test_data_path'] = args.input_path
+    if args.input_file:
+        config['data']['test_file_list'] = args.input_file
+    if args.batchsize:
+        config['eval']['batch_size'] = args.batch_size
 
     cuda = torch.cuda.is_available()
     logger.info("CUDA available: %s" % str(cuda))
