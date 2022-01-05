@@ -1,6 +1,6 @@
 # Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study
 
-This repository contains the code for the reproduction paper **Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study**
+This repository contains the code for the reproduction paper **[Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study](https://arxiv.org/abs/2012.11405)**
  of the paper [BERT-PLI: Modeling Paragraph-Level Interactions for Legal Case Retrieval](https://www.ijcai.org/Proceedings/2020/484) 
  and is based on the [BERT-PLI Github repository](https://github.com/ThuYShao/BERT-PLI-IJCAI2020).
 
