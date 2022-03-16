@@ -8,3 +8,4 @@ transformers==3.0.2
 pytrec-eval==0.5
 scikit-learn==0.23.2
 pyserini==0.9.4
+jsonlines==1.2.0
