@@ -1,6 +1,6 @@
 # Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study
 
-This repository contains the code for the reproduction paper **Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study**
+This repository contains the code for the reproduction paper **[Cross-domain Retrieval in the Legal and Patent Domain: a Reproducability Study](https://arxiv.org/abs/2012.11405)**
  of the paper [BERT-PLI: Modeling Paragraph-Level Interactions for Legal Case Retrieval](https://www.ijcai.org/Proceedings/2020/484) 
  and is based on the [BERT-PLI Github repository](https://github.com/ThuYShao/BERT-PLI-IJCAI2020).
 
@@ -12,6 +12,16 @@ We added the missing data [preprocessing](preprocessing) scripts as well as the 
 
 
 The open-sourced trained models can be found [here](https://zenodo.org/record/4088010).
+
+Please cite our work as follows
+```
+@inproceedings{althammer2021crossdomain,
+      title={Cross-domain Retrieval in the Legal and Patent Domains: a Reproducibility Study}, 
+      author={Sophia Althammer and Sebastian Hofstätter and Allan Hanbury},
+      year={2021},
+      booktitle={Advances in Information Retrieval, 43rd European Conference on IR Research, ECIR 2021},
+}
+```
 
 
 ## Outline

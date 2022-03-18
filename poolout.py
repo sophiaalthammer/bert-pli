@@ -56,7 +56,7 @@ if __name__ == "__main__":
         config['data']['test_data_path'] = args.input_path
     if args.input_file:
         config['data']['test_file_list'] = args.input_file
-    if args.batchsize:
+    if args.batch_size:
         config['eval']['batch_size'] = args.batch_size
 
     cuda = torch.cuda.is_available()
