@@ -41,6 +41,7 @@ def init_all(config, gpu_list, checkpoint, mode, *args, **params):
         #    logger.warning("No init_multi_gpu implemented in the model, use single gpu instead.")
     try:
         parameters = torch.load(checkpoint)
+        print(parameters)
         if mode == 'poolout':
             model = load_state_keywise(model, parameters["model"])
 
