@@ -172,3 +172,31 @@ if __name__ == "__main__":
     write_json_bertpli_file(run_train, corpus_docs, train_queries, top_n, output_dir, qrels_train, parts)
 
     # i also need the positives which are not in bm25! i think so?
+    # add the ones from qrels_train which are not in train set
+
+    assert run_train.keys() == qrels_train.keys()
+
+    rel_docs_per_query = {}
+    for key, value in qrels_train.items():
+        rel_docs = list(value.keys())
+        rel_docs_per_query.update({key:[]})
+        for doc in rel_docs:
+            if doc not in list(run_train.get(key).values()):
+                list1 = rel_docs_per_query.get(key)
+                list1.append(doc)
+                rel_docs_per_query.update({key:list1})
+
+    output_dir = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/train/train_pos_leftovers.json'
+    with jsonlines.open(os.path.join(output_dir), mode='w') as writer:
+        for query_id, value in rel_docs_per_query.items():
+            for doc_id in value:
+                guid = '{}_{}'.format(query_id, doc_id)
+                writer.write({'guid': guid,
+                              'q_paras': train_queries.get(query_id),
+                              'c_paras': corpus_docs.get(doc_id),
+                              'label': 1})
+
+
+
+
+
