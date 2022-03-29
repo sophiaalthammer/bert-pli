@@ -9,20 +9,19 @@ random.seed(42)
 #
 # config
 #
-parser = argparse.ArgumentParser()
+#parser = argparse.ArgumentParser()
 
-parser.add_argument('--run_before_poolout', action='store', dest='run_before_poolout',
-                    help='training file directory location', required=True)
-parser.add_argument('--run_after_poolout', action='store', dest='run_after_poolout',
-                    help='training file directory location', required=True)
+#parser.add_argument('--run_before_poolout', action='store', dest='run_before_poolout',
+#                    help='training file directory location', required=True)
+#parser.add_argument('--run_after_poolout', action='store', dest='run_after_poolout',
+#                    help='training file directory location', required=True)
+#args = parser.parse_args()
 
-args = parser.parse_args()
+run_before_poolout = '/mnt/c/Users/sophi/Documents/phd/data/coliee2022/task1/train/run_for_bertpli_top1_15_0.json'
+run_after_poolout = '/mnt/c/Users/sophi/Documents/phd/data/coliee2022/task1/bertpli/output/train/run_for_bertpli_top1_15_0.json'
 
-#run_before_poolout = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_train/'
-#run_after_poolout = '/mnt/c/Users/sophi/Documents/phd/data/coliee2019/task1/task1_train/train_org.json'
-
-run_before_poolout = args.run_before_poolout
-run_after_poolout = args.run_after_poolout
+#run_before_poolout = args.run_before_poolout
+#run_after_poolout = args.run_after_poolout
 
 # open the train org document and create a match of guid and the label
 # this is the file before the poolout, mine is run_for_bertpli_top1_15_0.json etc
