@@ -81,7 +81,7 @@ def single_label_top1_accuracy(outputs, label, config, result=None):
         #    result.append({"TP": 0, "FN": 0, "FP": 0, "TN": 0})
 
         it_is = int(id1[a])
-        should_be = int(id2[a])
+        should_be = int(id2[a][1])
         if it_is == should_be:
             result[it_is]["TP"] += 1
         else:
@@ -146,7 +146,7 @@ def single_label_top2_accuracy(outputs, label, config, result=None):
         #    result.append({"TP": 0, "FN": 0, "FP": 0, "TN": 0})
 
         it_is = int(id1[a])
-        should_be = int(id2[a])
+        should_be = int(id2[a][1])
         if it_is == should_be:
             result[it_is]["TP"] += 1
         else:

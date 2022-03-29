@@ -132,7 +132,7 @@ class AttentionRNN(nn.Module):
         if 'label' in data.keys():
             label = data['label']
             #loss = self.criterion(y, label.view(-1, 1))
-            loss = self.criterion(y, label.view(-1))
+            loss = self.criterion(y, label)
             #print(loss)
             #loss = loss.to(torch.float32)
             acc_result = self.accuracy_function(y, label, config, acc_result)

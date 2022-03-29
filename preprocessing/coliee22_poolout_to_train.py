@@ -33,7 +33,8 @@ with open(run_before_poolout) as f:
 
 match = {}
 for label in labels_list:
-    match.update({label.get('guid'): label.get('label')})
+    match.update({label.get('guid'): [1,0] if label.get('label')==1 else [0,1]})
+    #match.update({label.get('guid'): label.get('label')})
 
 # assign guid and labels from that file
 # augment the pooled out file with the labels! train_poolout is the pooled out filed
