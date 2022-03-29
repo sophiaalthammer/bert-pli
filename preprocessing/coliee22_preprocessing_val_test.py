@@ -170,3 +170,5 @@ if __name__ == "__main__":
     top_n = [1,15]
     parts = 6
     write_json_bertpli_file(run_train, corpus_docs, train_queries, top_n, output_dir, qrels_train, parts)
+
+    # i also need the positives which are not in bm25! i think so?
