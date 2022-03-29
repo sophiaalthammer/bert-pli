@@ -55,8 +55,8 @@ class AttentionRNN(nn.Module):
         self.fc_f = nn.Linear(self.hidden_dim*self.direction, self.output_dim)
         self.dropout = nn.Dropout(self.dropout_fc)
         self.weight = self.init_weight(config, gpu_list)
-        #self.criterion = nn.CrossEntropyLoss(weight=self.weight)
-        self.criterion = nn.MSELoss()
+        self.criterion = nn.CrossEntropyLoss(weight=self.weight)
+        #self.criterion = nn.MSELoss()
         self.accuracy_function = init_accuracy_function(config, *args, **params)
 
     def init_weight(self, config, gpu_list):
@@ -132,7 +132,7 @@ class AttentionRNN(nn.Module):
         if 'label' in data.keys():
             label = data['label']
             #loss = self.criterion(y, label.view(-1, 1))
-            loss = self.criterion(y, label)
+            loss = self.criterion(y, label.view(-1))
             #print(loss)
             #loss = loss.to(torch.float32)
             acc_result = self.accuracy_function(y, label, config, acc_result)
