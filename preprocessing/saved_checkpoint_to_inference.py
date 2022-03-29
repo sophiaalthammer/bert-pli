@@ -32,7 +32,7 @@ model_parameters2 = {'module.rnn.weight_ih_l0':model_parameters.get('rnn.weight_
                      'module.fc_a.weight': model_parameters.get('fc_a.weight'),
                      'module.fc_a.bias': model_parameters.get('fc_a.bias'),
                      'module.fc_f.weight': model_parameters.get('fc_f.weight'),
-                     'module.fc_f.bias': model_parameters.get('fc_f.bias')}
+                     'module.fc_f.bias': model_parameters.get('fc_f.bias'),
                      'module.criterion.weight': model_parameters.get('criterion.weight')}
 
 parameters['model'] = model_parameters2
