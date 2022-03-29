@@ -131,9 +131,11 @@ class AttentionRNN(nn.Module):
 
         if 'label' in data.keys():
             label = data['label']
-            loss = self.criterion(y, label.view(-1, 1))
-            loss = loss.to(torch.float32)
-            #acc_result = self.accuracy_function(y, label, config, acc_result)
+            #loss = self.criterion(y, label.view(-1, 1))
+            loss = self.criterion(y, label.view(-1))
+            #print(loss)
+            #loss = loss.to(torch.float32)
+            acc_result = self.accuracy_function(y, label, config, acc_result)
             if mode == 'valid':
                 output = []
                 y = y.cpu().detach().numpy().tolist()
@@ -146,7 +148,8 @@ class AttentionRNN(nn.Module):
                 for i, guid in enumerate(data['guid']):
                     output.append([guid, y[i]])
                 return {"output": output}
-            return {"loss": loss} #, "acc_result": acc_result}
+            #return {"loss": loss} #, "acc_result": acc_result}
+            return {"loss": loss, "acc_result": acc_result}
         else:
             output = []
             y = y.cpu().detach().numpy().tolist()
