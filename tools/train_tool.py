@@ -99,14 +99,15 @@ def train(parameters, config, gpu_list):
 
             results = model(data, config, gpu_list, acc_result, "train")
 
-            loss, acc_result = results["loss"], results["acc_result"]
+            #loss, acc_result = results["loss"], results["acc_result"]
+            loss = results["loss"]
             total_loss += float(loss)
 
             loss.backward()
             optimizer.step()
 
             if step % output_time == 0:
-                output_info = output_function(acc_result, config)
+                #output_info = output_function(acc_result, config)
 
                 delta_t = timer() - start_time
 
