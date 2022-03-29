@@ -1,6 +1,23 @@
 import torch
-checkpoint = '/mnt/c/Users/salthamm/Documents/phd/data/models/bert-pli-reprod/bertorg_lawrnn_gru.pkl'
-checkpoint_out = '/mnt/c/Users/salthamm/Documents/phd/data/models/bert-pli-reprod/bertorg_lawrnn_gru2.pkl'
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--ck_in', action='store', dest='ck_in',
+                    help='training file directory location', required=True)
+parser.add_argument('--ck_out', action='store', dest='ck_out',
+                    help='training file directory location', required=True)
+args = parser.parse_args()
+
+#run_before_poolout = '/mnt/c/Users/sophi/Documents/phd/data/coliee2022/task1/train/run_for_bertpli_top1_15_0.json'
+#run_after_poolout = '/mnt/c/Users/sophi/Documents/phd/data/coliee2022/task1/bertpli/output/train/run_for_bertpli_top1_15_0.json'
+
+checkpoint = args.ck_in
+checkpoint_out = args.ck_out
+
+
+#checkpoint = '/mnt/c/Users/salthamm/Documents/phd/data/models/bert-pli-reprod/bertorg_lawrnn_gru.pkl'
+#checkpoint_out = '/mnt/c/Users/salthamm/Documents/phd/data/models/bert-pli-reprod/bertorg_lawrnn_gru2.pkl'
 
 parameters = torch.load(checkpoint, map_location=torch.device('cpu'))
 model_parameters = parameters['model']
