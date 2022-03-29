@@ -22,16 +22,18 @@ checkpoint_out = args.ck_out
 parameters = torch.load(checkpoint, map_location=torch.device('cpu'))
 model_parameters = parameters['model']
 print(model_parameters.keys())
+print(model_parameters.get('rnn.weight_ih_l0'))
+print(model_parameters.get('rnn.weight_hh_l0'))
 
-model_parameters2 = {'module.rnn.weight_ih_l0':model_parameters.get('rnn.module.weight_ih_l0'),
-                     'module.rnn.weight_hh_l0': model_parameters.get('rnn.module.weight_hh_l0'),
-                     'module.rnn.bias_ih_l0': model_parameters.get('rnn.module.bias_ih_l0'),
-                     'module.rnn.bias_hh_l0': model_parameters.get('rnn.module.bias_hh_l0'),
-                     'module.fc_a.weight': model_parameters.get('fc_a.module.weight'),
-                     'module.fc_a.bias': model_parameters.get('fc_a.module.bias'),
-                     'module.fc_f.weight': model_parameters.get('fc_f.module.weight'),
-                     'module.fc_f.bias': model_parameters.get('fc_f.module.bias')}
-                     #'criterion.weight': model_parameters.get('criterion.weight')}
+model_parameters2 = {'module.rnn.weight_ih_l0':model_parameters.get('rnn.weight_ih_l0'),
+                     'module.rnn.weight_hh_l0': model_parameters.get('rnn.weight_hh_l0'),
+                     'module.rnn.bias_ih_l0': model_parameters.get('rnn.bias_ih_l0'),
+                     'module.rnn.bias_hh_l0': model_parameters.get('rnn.bias_hh_l0'),
+                     'module.fc_a.weight': model_parameters.get('fc_a.weight'),
+                     'module.fc_a.bias': model_parameters.get('fc_a.bias'),
+                     'module.fc_f.weight': model_parameters.get('fc_f.weight'),
+                     'module.fc_f.bias': model_parameters.get('fc_f.bias')}
+                     'module.criterion.weight': model_parameters.get('criterion.weight')}
 
 parameters['model'] = model_parameters2
 
