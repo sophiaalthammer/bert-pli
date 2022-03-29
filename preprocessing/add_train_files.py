@@ -15,6 +15,7 @@ args = parser.parse_args()
 
 run_merged = args.output_run
 run_list = args.run_list
+run_list = run_list.split(',')
 
 with jsonlines.open(run_merged, mode='w') as writer:
     for run in run_list:
