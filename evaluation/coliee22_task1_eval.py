@@ -105,19 +105,20 @@ def ranking_eval(qrels, run, output_dir, output_file= 'eval_bm25_aggregate_overl
                         [query_measures[measure]
                          for query_measures in results.values()])) + '\n')
 
-def run_to_df(labels, column_names):
+def run_to_df(labels, columns):
     samples = []
     for query_id, value in labels.items():
         for doc_id, label in value.items():
-            samples.append((query_id, doc_id, label))
+            samples.append([query_id, doc_id, label])
 
-    df_labels = pd.DataFrame(samples, columns=column_names)
+    df_labels = pd.DataFrame(samples)
+    df_labels = df_labels.rename(columns={0: columns[0], 1: columns[1], 2: columns[2]})
     return df_labels
 
 
-def eval_classification(labels, predictions, output_dir):
-    df_labels = run_to_df(labels, {'query_id', 'doc_id', 'label'})
-    df_pred = run_to_df(predictions, {'query_id', 'doc_id', 'prediction'})
+def eval_classification(labels, predictions, output_dir, output_file):
+    df_labels = run_to_df(labels, ['query_id', 'doc_id', 'label'])
+    df_pred = run_to_df(predictions, ['query_id', 'doc_id', 'prediction'])
 
     assert set(df_labels['query_id']) == set(df_pred['query_id'])
 
@@ -156,7 +157,7 @@ def eval_classification(labels, predictions, output_dir):
     else:
         f1 = 0
 
-    with open(os.path.join(output_dir,'eval_classification.txt'), 'w+') as output:
+    with open(os.path.join(output_dir,output_file), 'w+') as output:
         output.write(classification_report(label_list, pred_list) + '\n')
         output.write("Precision (for [0,1] class): {} \n".format(precision_score(label_list, pred_list, labels=[0, 1], average = None,
                                                                   pos_label=1)))
@@ -166,6 +167,17 @@ def eval_classification(labels, predictions, output_dir):
         output.write("Manually calculated Precision: {} \n".format(precision))
         output.write("Manually calculated Recall: {}\n".format(recall))
         output.write("Manually calculated F1 score: {} \n".format(f1, end='\n\n'))
+
+
+def format_pred_ranking_to_binary(predictions, cutoff=6):
+    pred_cutoff = {}
+    for query_id, ranking in predictions.items():
+        tuples = [(doc_id, score) for doc_id, score in ranking.items()]
+        tuples.sort(key=lambda x: x[1], reverse=True)
+        tuples_cutoff = [(tuples[i][0], 1) if i< cutoff else (tuples[i][0],0) for i in range(len(tuples))]
+        sorted_dict = {k: v for k, v in tuples_cutoff}
+        pred_cutoff.update({query_id:sorted_dict})
+    return pred_cutoff
 
 
 if __name__ == "__main__":
@@ -185,7 +197,7 @@ if __name__ == "__main__":
 
     label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/task1_test_labels_2021.json'
     pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/bertpli/output/' \
-                'val_output/model_coliee22_attenlstm_pluspos/output_val_merged.json'
+                'val_output/model_coliee22_attenlstm_pluspos/output_val_merged_2train.json'
 
     labels = read_label_file(label_file)
     if 'lstm' in pred_file:
@@ -194,8 +206,13 @@ if __name__ == "__main__":
         predictions = read_predictions(pred_file, score=False)
     output_dir = '/'.join(pred_file.split('/')[:-1])
 
-    ranking_eval(labels, predictions, output_dir, 'eval.txt')
-    eval_classification(labels, predictions, output_dir)
+    #ranking_eval(labels, predictions, output_dir, 'eval.txt')
+    #eval_classification(labels, predictions, output_dir, 'eval_classification_scores_cutoff6.txt')
+
+    # eval classification with scores! cutoff!
+    # this is better!
+    pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=6)
+    eval_classification(labels, pred_cutoff, output_dir, 'eval_classification_scores_cutoff6.txt')
 
 
 
