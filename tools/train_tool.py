@@ -135,8 +135,8 @@ def train(parameters, config, gpu_list):
         writer.add_scalar(config.get("output", "model_name") + "_train_epoch", float(total_loss) / (step + 1),
                           current_epoch)
 
-        #if current_epoch % test_time == 0:
-        #    with torch.no_grad():
-        #        eval_res = valid(model, parameters["valid_dataset"], current_epoch, writer, config, gpu_list,
-        #                         output_function)
+        if current_epoch % test_time == 0:
+            with torch.no_grad():
+                eval_res = valid(model, parameters["valid_dataset"], current_epoch, writer, config, gpu_list,
+                                 output_function)
 
