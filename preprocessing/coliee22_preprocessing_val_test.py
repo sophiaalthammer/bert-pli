@@ -99,43 +99,66 @@ def read_run_bm25(run_file):
                 run.get(query_id).update({rank: doc_id})
     return run
 
+
+def read_in_run_bm25opt2(run_path):
+    with open(run_path, 'r') as f:
+        lines = f.readlines()
+
+        run = {}
+        for line in lines:
+            lined_splitted = line.split('\t')
+            query_id = lined_splitted[0]
+            if query_id == 'qid':
+                pass
+            else:
+                doc_id = lined_splitted[2]
+                rank = int(lined_splitted[3])
+                if run.get(query_id):
+                    run.get(query_id).update({rank: doc_id})
+                else:
+                    run.update({query_id: {}})
+                    run.get(query_id).update({rank: doc_id})
+    return run
+
+
 if __name__ == "__main__":
-    # # read in the run
-    # run_path_val = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/val/coliee2021_test_bm25_optimized_top30_with_new_terms_f12005.run'
-    # run_path_test = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/test/coliee22_bm25_optimized_with_new_terms.run'
-    #
-    # run_val = read_in_run_bmopt(run_path_val)
-    # run_test = read_in_run_bmopt(run_path_test)
-    #
-    # # read in the cases with their paragraph splits
-    # # read in query cases
-    # queries_test_path = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/test/corpus_separately_para_with_intro_summ.jsonl'
-    # queries_val_path = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/separately_para_w_summ_intro.jsonl'
-    #
-    # qrels_val = read_label_file('/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/task1_test_labels_2021.json')
-    #
-    # # read in id content file
-    # val_queries = read_in_paragraph_file(queries_val_path)
-    # test_queries = read_in_paragraph_file(queries_test_path)
-    #
-    # # read in corpus
-    # corpus_path = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/corpus_jsonl/separately_para_w_summ_intro.jsonl'
-    # corpus_docs = read_in_paragraph_file(corpus_path)
-    #
-    # # first create the files for top10 for reranking
-    # # then for top10-15 for reranking!
-    # output_dir = '/'.join(run_path_val.split('/')[:-1])
-    # top_n = [1,15]
-    # parts = 2
-    # write_json_bertpli_file(run_val, corpus_docs, val_queries, top_n, output_dir, qrels_val, parts)
-    #
-    # #top_n = [11,15]
-    # #write_json_bertpli_file(run_val, corpus_docs, val_queries, top_n, output_dir, qrels_val, parts)
-    #
-    # # test
-    # output_dir = '/'.join(run_path_test.split('/')[:-1])
-    # top_n = [1, 15]
-    # write_json_bertpli_file(run_test, corpus_docs, test_queries, top_n, output_dir, parts=6)
+    # read in the run
+    #run_path_val = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/val/coliee2021_test_bm25_optimized_top30_with_new_terms_f12005.run'
+    #run_path_test = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/test/coliee22_bm25_optimized_with_new_terms.run'
+    run_path_val = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/bm25_opt/val/top_of_optimizedbm100.run'
+    run_path_test = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/bm25_opt/test/test2022_top100.csv'
+
+    run_val = read_in_run_bm25opt2(run_path_val)
+    run_test = read_in_run_bm25opt2(run_path_test)
+
+    # read in the cases with their paragraph splits
+    # read in query cases
+    queries_test_path = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/test/corpus_separately_para_with_intro_summ.jsonl'
+    queries_val_path = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/separately_para_w_summ_intro.jsonl'
+
+    qrels_val = read_label_file('/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/task1_test_labels_2021.json')
+
+    # read in id content file
+    val_queries = read_in_paragraph_file(queries_val_path)
+    test_queries = read_in_paragraph_file(queries_test_path)
+
+    # read in corpus
+    corpus_path = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/corpus_jsonl/separately_para_w_summ_intro.jsonl'
+    corpus_docs = read_in_paragraph_file(corpus_path)
+
+    # first create the files for top10 for reranking
+    # then for top10-15 for reranking!
+    output_dir = '/'.join(run_path_val.split('/')[:-1])
+    top_n = [1,50]
+    write_json_bertpli_file(run_val, corpus_docs, val_queries, top_n, output_dir, qrels_val, parts=4)
+
+    #top_n = [11,15]
+    #write_json_bertpli_file(run_val, corpus_docs, val_queries, top_n, output_dir, qrels_val, parts)
+
+    # test
+    output_dir = '/'.join(run_path_test.split('/')[:-1])
+    top_n = [1, 50]
+    write_json_bertpli_file(run_test, test_queries, test_queries, top_n, output_dir, parts=4)
 
     #top_n = [11, 15]
     #write_json_bertpli_file(run_test, corpus_docs, test_queries, top_n, output_dir, parts=6)

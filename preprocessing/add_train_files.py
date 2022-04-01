@@ -89,3 +89,22 @@ else:
                     sample = json.loads(line)
                     writer.write(sample)
 
+
+run = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/bertpli/poolout_output/train/run_merged_withpos_shuffled_balanced.json'
+
+with open(run, 'r') as f:
+    for line in f:
+        sample = json.loads(line)
+        samples.append(sample)
+
+all_docs = {}
+query_run = {}
+for sample in samples:
+    all_docs.update({sample.get('guid'): {'label': sample.get('label'), 'res': sample.get('res')}})
+    query_id = sample.get('guid').split('_')[0]
+    if query_run.get(query_id):
+        query_run.get(query_id).update({sample.get('guid'): sample.get('label')})
+    else:
+        query_run.update({query_id: {}})
+        query_run.get(query_id).update({sample.get('guid'): sample.get('label')})
+

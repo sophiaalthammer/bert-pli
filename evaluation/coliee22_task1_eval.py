@@ -197,7 +197,7 @@ if __name__ == "__main__":
 
     label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/task1_test_labels_2021.json'
     pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/bertpli/output/' \
-                'val_output/model_coliee22_attenlstm_pluspos/output_val_merged_2train.json'
+                'val_output/model_coliee22_attengru_pluspos/output_val_merged_balanced.json'
 
     labels = read_label_file(label_file)
     if 'lstm' in pred_file:
@@ -206,13 +206,13 @@ if __name__ == "__main__":
         predictions = read_predictions(pred_file, score=False)
     output_dir = '/'.join(pred_file.split('/')[:-1])
 
-    #ranking_eval(labels, predictions, output_dir, 'eval.txt')
-    #eval_classification(labels, predictions, output_dir, 'eval_classification_scores_cutoff6.txt')
+    ranking_eval(labels, predictions, output_dir, 'eval_balanced.txt')
+    eval_classification(labels, predictions, output_dir, 'eval_classification_balanced.txt')
 
     # eval classification with scores! cutoff!
     # this is better!
-    pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=6)
-    eval_classification(labels, pred_cutoff, output_dir, 'eval_classification_scores_cutoff6.txt')
+    pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=6)   #eval different cutoffs, eval different reranking depths later!
+    eval_classification(labels, pred_cutoff, output_dir, 'eval_balanced_scores_cutoff6.txt')
 
 
 
