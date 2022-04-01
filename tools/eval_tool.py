@@ -137,10 +137,10 @@ def valid(model, dataset, epoch, writer, config, gpu_list, output_function, mode
                       epoch)
 
     # eval results based on query micro F1
-    #micro_prec_query, micro_recall_query, micro_f1_query = eval_micro_query(result)
-    #loss_tmp = total_loss / (step + 1)
-    #print('valid set: micro_prec_query=%.4f, micro_recall_query=%.4f, micro_f1_query=%.4f' %
-    #      (micro_prec_query, micro_recall_query, micro_f1_query))
+    micro_prec_query, micro_recall_query, micro_f1_query = eval_micro_query(result)
+    loss_tmp = total_loss / (step + 1)
+    print('valid set: micro_prec_query=%.4f, micro_recall_query=%.4f, micro_f1_query=%.4f' %
+          (micro_prec_query, micro_recall_query, micro_f1_query))
 
     model.train()
-    return None #{'precision': micro_prec_query, 'recall': micro_recall_query, 'f1': micro_f1_query, 'loss': loss_tmp}
+    return {'precision': micro_prec_query, 'recall': micro_recall_query, 'f1': micro_f1_query, 'loss': loss_tmp}

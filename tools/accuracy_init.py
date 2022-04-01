@@ -1,10 +1,11 @@
 from .accuracy_tool import single_label_top1_accuracy, single_label_top2_accuracy, multi_label_accuracy, \
-    null_accuracy_function
+    null_accuracy_function, rel_label_accuracy
 
 accuracy_function_dic = {
     "SingleLabelTop1": single_label_top1_accuracy,
     "MultiLabel": multi_label_accuracy,
-    "Null": null_accuracy_function
+    "Null": null_accuracy_function,
+    "Rel_Label": rel_label_accuracy
 }
 
 

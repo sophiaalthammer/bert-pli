@@ -127,6 +127,42 @@ def multi_label_accuracy(outputs, label, config, result=None):
     return result
 
 
+def rel_label_accuracy(outputs, label, config, result=None):
+    if len(label[0]) != len(outputs[0]):
+        raise ValueError('Input dimensions of labels and outputs must match.')
+
+    outputs = outputs.data
+    labels = label.data
+
+    if result is None:
+        result = []
+
+    total = 0
+    nr_classes = outputs.size(1)
+
+    while len(result) < nr_classes:
+        result.append({"TP": 0, "FN": 0, "FP": 0, "TN": 0})
+
+    for i in range(nr_classes):
+        outputs1 = (outputs[:, i] >= 0.5).long()
+        labels1 = (labels[:, i].float() >= 0.5).long()
+        total += int((labels1 * outputs1).sum())
+        total += int(((1 - labels1) * (1 - outputs1)).sum())
+
+        if result is None:
+            continue
+
+        # if len(result) < i:
+        #    result.append({"TP": 0, "FN": 0, "FP": 0, "TN": 0})
+
+        result[i]["TP"] += int((labels1 * outputs1).sum())
+        result[i]["FN"] += int((labels1 * (1 - outputs1)).sum())
+        result[i]["FP"] += int(((1 - labels1) * outputs1).sum())
+        result[i]["TN"] += int(((1 - labels1) * (1 - outputs1)).sum())
+
+    return [result[1]]
+
+
 def single_label_top2_accuracy(outputs, label, config, result=None):
     raise NotImplementedError
     # still bug here
