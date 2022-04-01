@@ -63,6 +63,20 @@ def gen_micro_macro_result(res):
     }
 
 
+def gen_micro_macro_rel(res):
+    print('length of results of evaluation:'.format(len(res)))
+    p, r, f = get_prf(res[1])
+
+    return {
+        "micro_precision": round(p, 3),
+        "micro_recall": round(r, 3),
+        "micro_f1": round(f, 3),
+        "macro_precision": round(p, 3),
+        "macro_recall": round(r, 3),
+        "macro_f1": round(f, 3)
+    }
+
+
 def null_accuracy_function(outputs, label, config, result=None):
     return None
 
@@ -128,9 +142,6 @@ def multi_label_accuracy(outputs, label, config, result=None):
 
 
 def rel_label_accuracy(outputs, label, config, result=None):
-    if len(label[0]) != len(outputs[0]):
-        raise ValueError('Input dimensions of labels and outputs must match.')
-
     outputs = outputs.data
     labels = label.data
 
