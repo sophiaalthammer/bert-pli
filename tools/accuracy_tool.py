@@ -64,7 +64,6 @@ def gen_micro_macro_result(res):
 
 
 def gen_micro_macro_rel(res):
-    print('length of results of evaluation:'.format(len(res)))
     p, r, f = get_prf(res[1])
 
     return {
