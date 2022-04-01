@@ -70,7 +70,7 @@ def null_accuracy_function(outputs, label, config, result=None):
 def single_label_top1_accuracy(outputs, label, config, result=None):
     if result is None:
         result = []
-    id1 = torch.max(outputs, dim=0)[1] # changed from 1 to 0 for 1dim output
+    id1 = torch.max(outputs, dim=1)[1] # changed from 1 to 0 for 1dim output
     # id2 = torch.max(label, dim=1)[1]
     id2 = label
     nr_classes = outputs.size(1)
