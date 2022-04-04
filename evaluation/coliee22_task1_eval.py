@@ -249,7 +249,7 @@ if __name__ == "__main__":
 
         # eval classification with scores! cutoff!
         # this is better!
-        pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=4)   #eval different cutoffs, eval different reranking depths later!
+        pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=5)   #eval different cutoffs, eval different reranking depths later!
         eval_classification(labels, pred_cutoff, output_dir, 'eval_{}_scores_cutoff4.txt'.format(name))
 
         # eval for different reranking depths

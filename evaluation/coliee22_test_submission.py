@@ -14,6 +14,25 @@ if __name__ == "__main__":
         predictions = read_predictions_json(pred_file, score=False)
     else:
         predictions = read_predictions(pred_file, score=False)
+
+    # pred_cutoff = {}
+    # for query_id, ranking in predictions.items():
+    #     tuples = [(doc_id, score) for doc_id, score in ranking.items()]
+    #     tuples.sort(key=lambda x: x[1], reverse=True)
+    #     sorted_dict = {k: v for k, v in tuples}
+    #     pred_cutoff.update({query_id: sorted_dict})
+    #
+    # output_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/submission/bertpli_test_runtop50.txt'
+    #
+    # with open(output_file, 'w') as out_file:
+    #     for query_id, value in pred_cutoff.items():
+    #         rank = 1
+    #         for doc_id, prediction in value.items():
+    #             out_file.write('{}'.format(query_id) + '\t' + '{}'.format(doc_id) + '\t' + '{}'.format(
+    #                 rank) + '\t' + '{}\n'.format(prediction))
+    #             rank += 1
+
+
     pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=5)
 
     output_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/submission/DSSR_03.txt'
