@@ -8,6 +8,8 @@ import re
 import ast
 import pytrec_eval
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.metrics import classification_report
 from sklearn.metrics import precision_score, recall_score, f1_score
 random.seed(42)
@@ -116,7 +118,7 @@ def run_to_df(labels, columns):
     return df_labels
 
 
-def eval_classification(labels, predictions, output_dir, output_file):
+def create_df_for_eval(labels, predictions):
     df_labels = run_to_df(labels, ['query_id', 'doc_id', 'label'])
     df_pred = run_to_df(predictions, ['query_id', 'doc_id', 'prediction'])
 
@@ -125,6 +127,12 @@ def eval_classification(labels, predictions, output_dir, output_file):
     # join outer
     df_joined = pd.merge(df_labels, df_pred, how='outer', on=['query_id', 'doc_id'])
     df_joined = df_joined.fillna(0)
+
+    return df_joined
+
+
+def eval_classification(labels, predictions, output_dir, output_file):
+    df_joined = create_df_for_eval(labels, predictions)
 
     # manual check if the precision, recall and f1 score of the sklearn binary classification package (for relevant class 1)
     #     return the same evaluation metrics as when they are computed manually according to the formula on
@@ -169,6 +177,20 @@ def eval_classification(labels, predictions, output_dir, output_file):
         output.write("Manually calculated F1 score: {} \n".format(f1, end='\n\n'))
 
 
+def calculate_measure(labels, predictions, measure_name):
+    df_joined = create_df_for_eval(labels, predictions)
+
+    label_list = list(df_joined['label'])
+    pred_list = list(df_joined['prediction'])
+    score = None
+    if measure_name == 'f1':
+        score = f1_score(label_list, pred_list, average=None)
+    elif measure_name == 'recall':
+        score = recall_score(label_list, pred_list, average= None)
+    elif measure_name == 'precision':
+        score = precision_score(label_list, pred_list, labels=[0, 1], average = None,pos_label=1)
+    return score
+
 def format_pred_ranking_to_binary(predictions, cutoff=6):
     pred_cutoff = {}
     for query_id, ranking in predictions.items():
@@ -178,6 +200,16 @@ def format_pred_ranking_to_binary(predictions, cutoff=6):
         sorted_dict = {k: v for k, v in tuples_cutoff}
         pred_cutoff.update({query_id:sorted_dict})
     return pred_cutoff
+
+
+def predictions_cut_reranking_depth(predictions, reranking_depth):
+    pred_depth = {}
+    for query_id, value in predictions.items():
+        pred_depth.update({query_id: {}})
+        shortened_value = list(value.items())[:reranking_depth]
+        for values in shortened_value:
+            pred_depth.get(query_id).update({values[0]: values[1]})
+    return pred_depth
 
 
 if __name__ == "__main__":
@@ -195,24 +227,69 @@ if __name__ == "__main__":
     #label_file = args.label_file
     #pred_file = args.pred_file
 
-    label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/task1_test_labels_2021.json'
-    pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/bertpli/output/' \
-                'val_output/model_coliee22_attengru_pluspos/output_val_merged_balanced.json'
+    names = ['coliee19','coliee22', 'pluspos', 'pluspos_2', 'pluspos_balanced', 'pluspos_evalrel', 'pluspos_dropoutfc01']
 
-    labels = read_label_file(label_file)
-    if 'lstm' in pred_file:
-        predictions = read_predictions_json(pred_file, score=False)
-    else:
-        predictions = read_predictions(pred_file, score=False)
-    output_dir = '/'.join(pred_file.split('/')[:-1])
+    names = ['coliee19']
+    for name in names:
+        label_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2021/task1/test/task1_test_labels_2021.json'
+        pred_file = '/mnt/c/Users/salthamm/Documents/phd/data/coliee2022/task1/bertpli/output/' \
+                    'bm25_opt/val/attenlstm/output_val_{}.json'.format(name)
 
-    ranking_eval(labels, predictions, output_dir, 'eval_balanced.txt')
-    eval_classification(labels, predictions, output_dir, 'eval_classification_balanced.txt')
+        labels = read_label_file(label_file)
+        if 'lstm' in pred_file:
+            predictions = read_predictions_json(pred_file, score=False)
+        else:
+            predictions = read_predictions(pred_file, score=False)
 
-    # eval classification with scores! cutoff!
-    # this is better!
-    pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=6)   #eval different cutoffs, eval different reranking depths later!
-    eval_classification(labels, pred_cutoff, output_dir, 'eval_balanced_scores_cutoff6.txt')
+        # cutoff predictions at reranking depth
+        output_dir = '/'.join(pred_file.split('/')[:-1])
 
+        #ranking_eval(labels, predictions, output_dir, 'eval_rellabel.txt')
+        #eval_classification(labels, predictions, output_dir, 'eval_{}_classification.txt'.format(name))
 
+        # eval classification with scores! cutoff!
+        # this is better!
+        pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=5)   #eval different cutoffs, eval different reranking depths later!
+        eval_classification(labels, pred_cutoff, output_dir, 'eval_{}_scores_cutoff4.txt'.format(name))
 
+        # eval for different reranking depths
+        # now it is 50
+        # i should plot the f1 score for different depths
+        colours = sns.color_palette('colorblind', 10)
+
+        #for cutoff in range(1, 10):
+        # x = []
+        # y = []
+        # cutoff = 5
+        # for reranking_depth in range(1,20):
+        #     pred_depth = predictions_cut_reranking_depth(predictions, reranking_depth)
+        #     pred_cutoff = format_pred_ranking_to_binary(pred_depth, cutoff=cutoff)
+        #     score = calculate_measure(labels, pred_cutoff, 'f1')
+        #
+        #     x.append(reranking_depth)
+        #     y.append(list(score)[1])
+        #
+        # plt.plot(x, y, colours[cutoff-1],label='cutoff {}'.format(cutoff))
+        #
+        # plt.legend()
+        # plt.xlabel('Reranking depth')
+        # plt.ylabel('F1')
+        # plt.savefig(os.path.join(output_dir, 'reranking_depth_cutoff5_f1_{}_2.svg'.format(name)))
+        # plt.close()
+
+        x = []
+        y = []
+        for cutoff in range(1, 10):
+            pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=cutoff)
+            score = calculate_measure(labels, pred_cutoff, 'f1')
+
+            x.append(cutoff)
+            y.append(list(score)[1])
+
+        plt.plot(x, y)
+
+        plt.legend()
+        plt.xlabel('Cutoff')
+        plt.ylabel('F1')
+        plt.savefig(os.path.join(output_dir, 'cutoff_f1_{}.svg'.format(name)))
+        plt.close()
