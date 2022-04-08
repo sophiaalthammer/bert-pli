@@ -202,13 +202,21 @@ def format_pred_ranking_to_binary(predictions, cutoff=6):
     return pred_cutoff
 
 
-def predictions_cut_reranking_depth(predictions, reranking_depth):
+def predictions_cut_reranking_depth(pred_new, reranking_depth):
     pred_depth = {}
-    for query_id, value in predictions.items():
+    for query_id, value in pred_new.items():
         pred_depth.update({query_id: {}})
-        shortened_value = list(value.items())[:reranking_depth]
-        for values in shortened_value:
-            pred_depth.get(query_id).update({values[0]: values[1]})
+        doc_ids = list(value.keys())
+        scores = list(value.values())
+        max_length = len(doc_ids)
+        for rank in range(max_length):
+            if rank < reranking_depth:
+                pred_depth.get(query_id).update({doc_ids[rank]:
+                                                     max_length + 1 + scores[rank]
+                                                     if scores[rank] != 0
+                                                     else max_length + 1 + scores[rank] + reranking_depth - rank})
+            else:
+                pred_depth.get(query_id).update({doc_ids[rank]: max_length - rank})
     return pred_depth
 
 
@@ -247,10 +255,20 @@ if __name__ == "__main__":
         #ranking_eval(labels, predictions, output_dir, 'eval_rellabel.txt')
         #eval_classification(labels, predictions, output_dir, 'eval_{}_classification.txt'.format(name))
 
+        # include ranking in the scores!
+        pred_new = {}
+        for query_id, value in predictions.items():
+            pred_new.update({query_id:{}})
+            rank = 0
+            for doc_id, score in value.items():
+                pred_new.get(query_id).update({doc_id:score*(len(value.keys())-rank)})
+                rank += 1
+
+
         # eval classification with scores! cutoff!
         # this is better!
-        pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=5)   #eval different cutoffs, eval different reranking depths later!
-        eval_classification(labels, pred_cutoff, output_dir, 'eval_{}_scores_cutoff4.txt'.format(name))
+        pred_cutoff = format_pred_ranking_to_binary(pred_new, cutoff=5)   #eval different cutoffs, eval different reranking depths later!
+        eval_classification(labels, pred_cutoff, output_dir, 'eval_{}_scores_cutoff5scorestrue.txt'.format(name))
 
         # eval for different reranking depths
         # now it is 50
@@ -258,38 +276,51 @@ if __name__ == "__main__":
         colours = sns.color_palette('colorblind', 10)
 
         #for cutoff in range(1, 10):
-        # x = []
-        # y = []
-        # cutoff = 5
-        # for reranking_depth in range(1,20):
-        #     pred_depth = predictions_cut_reranking_depth(predictions, reranking_depth)
-        #     pred_cutoff = format_pred_ranking_to_binary(pred_depth, cutoff=cutoff)
-        #     score = calculate_measure(labels, pred_cutoff, 'f1')
-        #
-        #     x.append(reranking_depth)
-        #     y.append(list(score)[1])
-        #
-        # plt.plot(x, y, colours[cutoff-1],label='cutoff {}'.format(cutoff))
-        #
-        # plt.legend()
-        # plt.xlabel('Reranking depth')
-        # plt.ylabel('F1')
-        # plt.savefig(os.path.join(output_dir, 'reranking_depth_cutoff5_f1_{}_2.svg'.format(name)))
-        # plt.close()
-
         x = []
-        y = []
-        for cutoff in range(1, 10):
-            pred_cutoff = format_pred_ranking_to_binary(predictions, cutoff=cutoff)
-            score = calculate_measure(labels, pred_cutoff, 'f1')
+        f1_list = []
+        p_list = []
+        r_list = []
+        cutoff = 5
+        for reranking_depth in range(10,55,5):
+            pred_depth = predictions_cut_reranking_depth(pred_new, reranking_depth)
+            pred_cutoff = format_pred_ranking_to_binary(pred_depth, cutoff=cutoff)
+            f1score = calculate_measure(labels, pred_cutoff, 'f1')
+            pscore = calculate_measure(labels, pred_cutoff, 'precision')
+            rscore = calculate_measure(labels, pred_cutoff, 'recall')
 
-            x.append(cutoff)
-            y.append(list(score)[1])
+            x.append(reranking_depth)
+            f1_list.append(list(f1score)[1])
+            p_list.append(list(pscore)[1])
+            r_list.append(list(rscore)[1])
 
-        plt.plot(x, y)
+        from pylab import *
+        #matplotlib.use("pgf")
+        #matplotlib.rcParams.update({
+        #    "pgf.texsystem": "pdflatex",
+        #    'font.family': 'serif',
+        #    'text.usetex': True,
+        #    'pgf.rcfonts': False,
+        #})
 
-        plt.legend()
-        plt.xlabel('Cutoff')
-        plt.ylabel('F1')
-        plt.savefig(os.path.join(output_dir, 'cutoff_f1_{}.svg'.format(name)))
+        plt.grid(alpha=0.5)
+        plt.plot(x, p_list)
+        plt.plot(x, r_list)
+
+        plt.plot(x, f1_list)
+        plt.xticks(np.arange(min(x), max(x) + 1, 5.0))
+        plt.legend(['$Precision$', '$Recall$', '$F1$'], loc="upper right", prop={'size': 12})
+
+        plt.ylabel('ylabel', fontsize=16)
+        plt.xlabel('ylabel', fontsize=13)
+
+        xlabel('$Re-ranking\; Depth$')
+        ylabel('$Score$')
+
+        plt.savefig(os.path.join(output_dir, 'reranking_depth_cutoff5_f1_p_r_{}_2.png'.format(name)), dpi=200)
         plt.close()
+
+        print('x={}'.format(x))
+        print('f1={}'.format(f1_list))
+        print('p={}'.format(p_list))
+        print('r={}'.format(r_list))
+
